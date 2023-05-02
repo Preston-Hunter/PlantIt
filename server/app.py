@@ -8,6 +8,7 @@ from sqlalchemy.exc import IntegrityError
 from config import app,db,api
 from models import User, Plant, UserPlant, Comment
 from flask_cors import CORS
+from random import choice as rc
 CORS(app)
     ###########################################
     ##                Home API               ##
@@ -97,6 +98,9 @@ api.add_resource(Home, '/')
 # ##########
 # ## USER ##
 # ##########
+
+cors = CORS(app)
+
 
 class AllUsers(Resource):
     def get(self):
@@ -219,6 +223,17 @@ class OnePlant(Resource):
         
 api.add_resource(OnePlant, "/plants/<int:id>")
 
+class RandomPlant(Resource):
+    def get(self):
+        plants = Plant.query.all()
+        if plants.length != 0:
+            print(len(plants))
+            # plant = rc(plants)
+            plant = plants[0]
+            return make_response(plant.to_dict(), 200)
+        return make_response({"error":"no plant entries"}, 404)
+
+api.add_resource(RandomPlant, "/randomplant")
 
 class AllComments(Resource):
     def get(self):
@@ -341,6 +356,39 @@ class OneUserPlant(Resource):
 
 api.add_resource(OneUserPlant, "/userplants/<int:id>")
 
+class Signup(Resource):
+    def post(self):
+        pass
+
+class CheckSession(Resource):
+    def get(self):
+        pass
+
+class Logout(Resource):
+    def delete(self):
+        pass
+
+class ClearSession(Resource):
+    def delete(self):    
+        # session[''] = None
+        session['user_id'] = None
+        return {}, 204
+api.add_resource(ClearSession, '/clear', endpoint='clear')  
+ 
+class Login(Resource):
+    def post(self):
+        username = request.get_json()['username']
+        password = request.get_json()['password']
+        user = User.query.filter(User.username == username).first()
+        if user:
+            if user.authenticate(password):
+                session['user_id'] = user.id
+                return user.to_dict(), 200 
+        return {'error': '401 Unauthorized'}, 401
+api.add_resource(Login, '/login', endpoint='login')
+
+
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
+    
     
