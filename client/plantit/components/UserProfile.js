@@ -1,6 +1,8 @@
 import { useRef, useState, ChangeEvent, useEffect } from "react"
 import { useParams } from "react-router-dom"
-import {StyleSheet} from "react-native"
+import {StyleSheet, Text, View, Pressable } from 'react-native';
+
+
 export default function UserProfile(){
     const inputFile = useRef(null)
     // const [file, setFile] = useState<File>(null);
@@ -37,13 +39,19 @@ export default function UserProfile(){
     
             
         }
+
+        if(!loaded){
+          return <Text>loading...</Text>
+        }
+
+
 //  min-h-screen bg-gray-100 justify-center pt-32
         return (
             <div className="user-page">
                 <div id="user-info" className=" float-user-elements">
-                    <div className="text-3xl text-center break-words pb-2">Name:</div>
-                    <div id = "username" className="text-3xl text-center break-words pb-2">username:{username}</div>
-                    <div id = "email" className="text-3xl text-center break-words pb-2">email:placeholder{username}@gmail.com</div>
+                    {/* <div className="text-3xl text-center break-words pb-2">Name:</div> */}
+                    <div id = "username" className="text-3xl text-center break-words pb-2">Username:{user.username}</div>
+                    <div id = "email" className="text-3xl text-center break-words pb-2">email:{user.email}</div>
                 </div>
                 <div className="profile-pic-container float-user-elements">
                     <input type="text" onChange={(e)=>{setimgURL(e.target.value)}}/>

@@ -123,7 +123,7 @@ class AllUsers(Resource):
         except:
             return make_response({"error":"invalid attributes"}, 400)
 
-api.add_resource(AllUsers, '/plants')
+api.add_resource(AllUsers, '/users')
 
 class OneUser(Resource):
     def get(self, id):

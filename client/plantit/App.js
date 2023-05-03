@@ -9,12 +9,18 @@ import React, { Component, useEffect, useState } from "react";
 import {Routes, Route, BrowserRouter} from "react-router-dom"
 import {Platform } from "react-native"
 import UserProfile from "./components/UserProfile.js";
-
+import PlantsDisplay from "./components/PlantsDisplay.js";
+import LoginPage from "./components/LoginPage.js";
 const Stack = createNativeStackNavigator();
 // navigation.navigate("About")
 const Tab = createBottomTabNavigator();
 export default function App(){
     const [plantsList, setPlantsList]= useState([])
+    const [loaded, setLoaded] = useState(false)
+
+    useEffect(()=>{
+        fetch("http://localhost:5555/plants").then(res=>res.json()).then(arr=>{setPlantsList(arr)}).then(setLoaded(true));
+      }, []);
 
 
     if (Platform.OS !== 'web') {
@@ -45,7 +51,10 @@ export default function App(){
                 <Route path="/" element={<Base/>}/>
                 <Route path="/home" element={<Home/>}/>
                 <Route path = "/plants/:id" element={<Plant random = {false}/>}/>
+                <Route path = "/plants" element={<PlantsDisplay loaded={loaded} plantsList={plantsList}/>}/>
+                <Route path = "/login" element = {LoginPage}></Route>
                 <Route path = "/users/:id" element={<UserProfile></UserProfile>}></Route>
+                
             </Routes>
         </BrowserRouter>
         );
