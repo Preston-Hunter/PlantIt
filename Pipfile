@@ -17,6 +17,7 @@ jsonify = "*"
 requests = "*"
 faker = "*"
 python-dotenv = "*"
+flask-session = "*"
 
 [dev-packages]
 

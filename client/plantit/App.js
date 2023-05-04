@@ -70,6 +70,8 @@ export default function App(){
                 <Tab.Screen name = "Plant">
                     {props=>{return <Plant random={true} {...props}/>}}
                 </Tab.Screen>
+                <Tab.Screen name="login" component={LoginPage}/>
+                <Tab.Screen name = "Plants" component={PlantsDisplay}></Tab.Screen>
             </Tab.Navigator>
         </NavigationContainer>
         {/* <NavigationContainer>

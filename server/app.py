@@ -9,7 +9,8 @@ from config import app,db,api
 from models import User, Plant, UserPlant, Comment
 from flask_cors import CORS
 from random import choice as rc
-CORS(app)
+# from flask_session import Session
+# Session(app)
     ###########################################
     ##                Home API               ##
     ###########################################
@@ -357,7 +358,7 @@ class Signup(Resource):
 class CheckSession(Resource):
     def get(self):
         # print(session.get('username').first())
-        print(session.get('username'))
+        print("sessionid: ",session, session.get('username'))
         if(session.get('username')):
             user = User.query.filter(User.username == session.get('username')).first()
             if user:
@@ -389,13 +390,15 @@ class Login(Resource):
         user = User.query.filter(User.username == username).first()
         if user:
             if user.authenticate(password):
-                session['user_id'] = user.id
                 session['username'] = user.username
-                print(session["username"])
+                print(session.get("username"))
                 return user.to_dict(), 200 
         return {'error': '401 Unauthorized'}, 401
 api.add_resource(Login, '/login', endpoint='login')
 
+@app.before_request
+def setup():
+    session.permanent = True
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

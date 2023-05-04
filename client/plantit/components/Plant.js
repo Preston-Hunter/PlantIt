@@ -117,7 +117,7 @@ export default function Plant({random}){
 
 
         if (!loaded || !loaded2){
-            return <Text>loading...{loaded}{random ? "true":"false"}</Text>
+            return <Text>loading...{loaded? "true":"false"}{fetch_route}{random ? "true":"false"}</Text>
         }
     return (
     <div>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, Text, View, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Pressable, TextInput } from 'react-native';
+import GenericButton from "./GenericButtons";
 
 
 export default function LoginPage({user, setUser}){
@@ -36,26 +37,27 @@ export default function LoginPage({user, setUser}){
     }
 
     return (
-    <div>
+    <View>
         <Text>{!user ? "none": user["username"]}</Text>
 
-      <form onSubmit={handleSubmit}>
 
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          />
-          
-        <input
-          type="text"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          />
-        <button type="submit">Login</button>
-      </form>
-      <button onClick={handleLogout}>logout</button>
-    </div>
+            <TextInput
+            type="text"
+            value={username}
+            onChangeText={(text) => setUsername(text)}
+            />
+            
+            <TextInput
+            type="text"
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+            />
+        <View>
+            <GenericButton theme="submit"  label="login" onPressed={handleSubmit}/>
+
+            <GenericButton label="logout" onPressed={handleLogout}/>
+        </View>
+    </View>
     );
     
 }
