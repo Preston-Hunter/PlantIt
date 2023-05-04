@@ -34,12 +34,6 @@ api.add_resource(Home, '/')
 #     if (request.endpoint) not in access_list and (not session.get('user_id')):   
 #         return {'error': 'Unauthorized'}, 401
 
-# class ClearSession(Resource):       ## DEV Only. Don't want users to be able to clear their cookies. 
-#     def delete(self):    
-#         session['user_cart'] = None
-#         session['user_id'] = None
-#         return {}, 204
-# api.add_resource(ClearSession, '/clear', endpoint='clear')  
 
 # class Signup(Resource):
 #     def post(self):
@@ -362,20 +356,33 @@ class Signup(Resource):
 
 class CheckSession(Resource):
     def get(self):
-        pass
+        # print(session.get('username').first())
+        print(session.get('username'))
+        if(session.get('username')):
+            user = User.query.filter(User.username == session.get('username')).first()
+            if user:
+                return user.to_dict()
+        else:
+            return {'message': '401: Not Authorized'}, 401
+api.add_resource(CheckSession, '/check_session', endpoint='check_session')
 
 class Logout(Resource):
     def delete(self):
-        pass
+        session['username'] = None
+        return {}, 204
+api.add_resource(Logout, '/logout', endpoint='logout')  
+
 
 class ClearSession(Resource):
     def delete(self):    
         # session[''] = None
-        session['user_id'] = None
+        session['username'] = None
         return {}, 204
 api.add_resource(ClearSession, '/clear', endpoint='clear')  
  
 class Login(Resource):
+    def get(self):
+        pass
     def post(self):
         username = request.get_json()['username']
         password = request.get_json()['password']
@@ -383,6 +390,8 @@ class Login(Resource):
         if user:
             if user.authenticate(password):
                 session['user_id'] = user.id
+                session['username'] = user.username
+                print(session["username"])
                 return user.to_dict(), 200 
         return {'error': '401 Unauthorized'}, 401
 api.add_resource(Login, '/login', endpoint='login')

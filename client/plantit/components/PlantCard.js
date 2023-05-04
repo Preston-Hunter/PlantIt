@@ -24,7 +24,7 @@ export default function PlantCard({image, plantId, scientific_name, name, naviga
         <div style={{"flexDirection":"row","width":"20%", "height":"auto"}}>
             <img src = {image} onClick={handleClick} style={{"width":"80%"}}/>
             <br></br>
-            <Text>{scientific_name}{name!=null ? `(${name})`:""}</Text>
+            <Text>{scientific_name}{name!="" ? `(${name})`:""}</Text>
         </div>
     )
 

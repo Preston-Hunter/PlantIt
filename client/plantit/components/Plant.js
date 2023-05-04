@@ -23,9 +23,11 @@ export default function Plant({random}){
 
         }))
         .then(arr=>{
-            console.log(arr)
+
             if((arr.length)!=0){
-                return arr[0]
+                if(arr[0]["liked"]!=0){
+                    return arr[0]
+                }
             }
             return false
         }).then(_=>{
@@ -62,15 +64,15 @@ export default function Plant({random}){
             
         }, [id])
 
-
+// delete favorite liked or platned im tired
     function handleFavorite(){
-        fetch(`http://127.0.0.1:5555/userplants}`, {
+        fetch(`http://127.0.0.1:5555/userplants`, {
             method:"POST",
             headers:{
                 "Content-Type":"application/json",
             },
             body:JSON.stringify({"user_id":1, "plant_id":id,"liked":1,"planted":0})
-        })
+        }).then(_=>{setFavorited(!favorited)})
     }
 
     function handleUnfavorite(){
@@ -101,7 +103,7 @@ export default function Plant({random}){
                 }
             })
 
-        })
+        }).then(_=>{setFavorited(!favorited)})
 
 
     }

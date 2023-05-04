@@ -17,8 +17,20 @@ def parsePlantEntry(plant):
     family = plant["family"]
     genus = plant["genus"]
     image = plant["image_url"]
+    # 
+    flower_color = ""
     if(image == None):
         image = "https://www.thespruce.com/thmb/wwG2JvRzLBzZzQ-o4TSeh0l2crs=/5121x3414/filters:fill(auto,1)/freshly-potted-plants-562613519-586ff9b25f9b584db36fb4de.jpg"
+    if(name == None):
+        name = ""
+    if(scientific_name == None):
+        name = ""
+    if(genus == None):
+        name = ""
+    if(family == None):
+        name = ""
+    if(flower_color == None):
+        flower_color = ""
     # duration = db.Column(db.String)
     # edible_part = db.Column(db.String)
     # edible = db.Column(db.String)
@@ -33,7 +45,7 @@ def parsePlantEntry(plant):
     # flower_color = db.Column(db.String)
     api_link = plant["links"]["self"]
     return Plant(name = name, scientific_name= scientific_name, rank = rank, family= family, genus=genus, image=image,
-          api_link=api_link)
+          api_link=api_link, flower_color = flower_color)
 
 
 
@@ -63,10 +75,20 @@ with app.app_context():
 #####################
     print("Creating Classname(User) data...")
     new_user_1 = User(username="Admin", email="Admin@flatironschool.com", admin=True, image=default_image)
+    new_user_1.password_hash = "Admin"
+
     new_user_2 = User(username="Matthew", email="Matthew@flatironschool.com", admin=False, image=default_image)
+    new_user_2.password_hash = "Matthew"
+
     new_user_3 = User(username="Preston", email="Preston@flatironschool.com", admin=False, image=default_image)
+    new_user_3.password_hash = "Preston"
+
     new_user_4 = User(username="Dylan", email="Dylan@flatironschool.com",  admin=False, image=default_image)
+    new_user_4.password_hash = "Dylan"
+
     new_user_5 = User(username="GreenGiant", email="Sarah@flatironschool.com", admin=False, image=default_image)
+    new_user_5.password_hash = "GreenGiant"
+
     users = [new_user_1,new_user_2,new_user_3,new_user_4,new_user_5]
     # usernames = ['Admin', 'Matthew', 'Preston', 'Nick', 'GreenGiant']
     # for n in range(20):
