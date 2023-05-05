@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import {useParams} from "react-router-dom"
 import { StyleSheet, Text, View, Pressable } from 'react-native';
+import CommentsSection from "./CommentsSection";
 
 export default function Plant({random}){
     const [loaded, setLoaded] = useState(false)
@@ -109,6 +110,8 @@ export default function Plant({random}){
     }
 
 
+
+
     let fetch_route = "randomplant"
     if (!random){
         fetch_route = `plants/${id}`
@@ -128,6 +131,7 @@ export default function Plant({random}){
         <Text>Characteristics
             <Text>Flower color:{plant.flower_color}</Text>
         </Text>
+        <br></br>
         <Text>Growing Recomendations
             <Text>ph_max:{plant.ph_max}</Text>
             <Text>ph_min:{plant.ph_min}</Text>
@@ -135,10 +139,12 @@ export default function Plant({random}){
             <Text>light:{plant.light}</Text>
             <Text>atmospheric humidity:{plant.atmo_humidity}</Text>
         </Text>
+        <br></br>
         <Text>Source:{plant.api_link}</Text>
         {favorited ?         
         <button  onClick={handleUnfavorite}>Unfavorite</button>:
         <button onClick={handleFavorite}>Favorite</button>
         }
+        <CommentsSection plantId={plant.id}></CommentsSection>
     </div>)
 }

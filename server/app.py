@@ -291,6 +291,18 @@ class OneComment(Resource):
     
 api.add_resource(OneComment, "/comments/<int:id>")
 
+class AllCommentsForPlantId(Resource):
+    def get(self, pid):
+        comments = Comment.query.filter(Comment.plant_id == pid).all()
+        comments_list = []
+        for c in comments:
+            comments_list.append(c.to_dict())
+        if len(comments_list) > 0:
+            return make_response(jsonify(comments_list), 200)
+        return make_response({"error":f"no comments to query for this plant {pid}" }, 500)
+api.add_resource(AllCommentsForPlantId, "/commentsforplant/<int:pid>")
+
+
 class AllUserPlants(Resource):
     def get(self):
         userplants = UserPlant.query.all()
@@ -371,7 +383,7 @@ class Logout(Resource):
     def delete(self):
         session['username'] = None
         return {}, 204
-api.add_resource(Logout, '/logout', endpoint='logout')  
+api.add_resource(Logout, '/api/logout', endpoint='logout')  
 
 
 class ClearSession(Resource):
@@ -394,11 +406,11 @@ class Login(Resource):
                 print(session.get("username"))
                 return user.to_dict(), 200 
         return {'error': '401 Unauthorized'}, 401
-api.add_resource(Login, '/login', endpoint='login')
+api.add_resource(Login, '/api/login', endpoint='login')
 
-@app.before_request
-def setup():
-    session.permanent = True
+# @app.before_request
+# def setup():
+#     session.permanent = True
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

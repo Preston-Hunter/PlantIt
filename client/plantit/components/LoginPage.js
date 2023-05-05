@@ -10,7 +10,7 @@ export default function LoginPage({user, setUser}){
 
     function handleSubmit(e) {
       e.preventDefault();
-      fetch("http://127.0.0.1:5555/login", {
+      fetch("/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -18,7 +18,7 @@ export default function LoginPage({user, setUser}){
         body: JSON.stringify({ "username": username, "password":password }),
       })
         .then((r) =>{
-            console.log(r.status)
+            console.log(r)
             if(r.status==401){
                 return null
             }
@@ -27,7 +27,7 @@ export default function LoginPage({user, setUser}){
     }
 
     function handleLogout(){
-        fetch("http://127.0.0.1:5555/logout", {
+        fetch("/api/logout", {
             method: "DELETE",
              }).then(_=>{setUser(null)})
     }
