@@ -1,14 +1,20 @@
 import { useEffect, useState } from "react"
 import {useParams} from "react-router-dom"
-import { StyleSheet, Text, View, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Pressable, Platform } from 'react-native';
 import CommentsSection from "./CommentsSection";
 
-export default function Plant({random}){
+export default function Plant({plantIdForNative, web }){
     const [loaded, setLoaded] = useState(false)
     const [loaded2, setLoaded2] = useState(false)
 
     const [plant, setPlant] = useState(null)
-    const { id } = useParams()
+    let id = 0
+    if (!web){
+        id = plantIdForNative
+    }
+    else{
+        id = useParams()["id"]
+    }
     const [favorited, setFavorited] = useState(false)
 
     useEffect(()=>{
@@ -44,9 +50,8 @@ export default function Plant({random}){
     },[])
 
     useEffect(()=>{
-        fetch(`http://127.0.0.1:5555/${fetch_route}`)
+        fetch(`http://127.0.0.1:5555/plants/${id}`)
         .then(resp=>{
-            console.log(fetch_route)
 
             if (resp.status == 404){
                 return null
@@ -112,35 +117,34 @@ export default function Plant({random}){
 
 
 
-    let fetch_route = "randomplant"
-    if (!random){
-        fetch_route = `plants/${id}`
+
+
+    if (!loaded || !loaded2){
+        return <Text>loading...{loaded? "true":"false"}</Text>
     }
 
-
-
-        if (!loaded || !loaded2){
-            return <Text>loading...{loaded? "true":"false"}{fetch_route}{random ? "true":"false"}</Text>
-        }
     return (
     <div>
         <img src = {plant.image} style={{width:"50%"}}></img>
-        <Text>Name:{plant.name}</Text>
-        <Text>Scientific name:{plant.scientific_name}</Text>
-        <Text>Family/Genus: {plant.family}/{plant.genus}</Text>
-        <Text>Characteristics
-            <Text>Flower color:{plant.flower_color}</Text>
+        <br></br>
+        <Text><Text style={{fontWeight:"bold"}}>Name:</Text>{plant.name}     </Text>
+        <Text><Text style={{fontWeight:"bold"}}>Scientific name:</Text>{plant.scientific_name}     </Text>
+        <Text><Text style={{fontWeight:"bold"}}>Family/Genus:</Text>{plant.family}/{plant.genus}     </Text>
+        <br></br>
+        <Text>Characteristics:
+            <br></br>
+            <Text>     Flower color:{plant.flower_color}</Text>
         </Text>
         <br></br>
-        <Text>Growing Recomendations
-            <Text>ph_max:{plant.ph_max}</Text>
-            <Text>ph_min:{plant.ph_min}</Text>
-            <Text>salinity:{plant.salinity}</Text>
-            <Text>light:{plant.light}</Text>
-            <Text>atmospheric humidity:{plant.atmo_humidity}</Text>
+        <Text >Growing Recomendations:
+            <Text>     <Text style={{fontWeight:"bold"}}>ph_max:</Text>{plant.ph_max}</Text>
+            <Text>     <Text style={{fontWeight:"bold"}}>ph_min:</Text>{plant.ph_min}</Text>
+            <Text>     <Text style={{fontWeight:"bold"}}>salinity:</Text>{plant.salinity}</Text>
+            <Text>     <Text style={{fontWeight:"bold"}}>light:</Text>{plant.light}</Text>
+            <Text>     <Text style={{fontWeight:"bold"}}>atmospheric humidity:</Text>{plant.atmo_humidity}</Text>
         </Text>
         <br></br>
-        <Text>Source:{plant.api_link}</Text>
+        <Text style={{fontStyle:"italic"}}>Source:{plant.api_link}</Text>
         {favorited ?         
         <button  onClick={handleUnfavorite}>Unfavorite</button>:
         <button onClick={handleFavorite}>Favorite</button>

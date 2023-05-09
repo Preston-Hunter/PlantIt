@@ -4,14 +4,16 @@ import Plant from "./components/Plant.js"
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { StyleSheet, Text, View, Pressable, TextInput } from 'react-native';
 
 import React, { Component, useEffect, useState } from "react";
 import {Routes, Route, BrowserRouter} from "react-router-dom"
-import {Platform } from "react-native"
+import {Platform, TextComponent } from "react-native"
 import UserProfile from "./components/UserProfile.js";
 import PlantsDisplay from "./components/PlantsDisplay.js";
 import LoginPage from "./components/LoginPage.js";
-
+import GardenHelper from "./components/GardenHelper.js";
+import "./styles.css";
 
 
 
@@ -20,9 +22,11 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 export default function App(){
     const [plantsList, setPlantsList]= useState([])
-    const [loaded, setLoaded] = useState(false)
+    const [loaded, setLoaded] = useState(true)
     const [user,setUser] = useState(null)
-    // const [filteredPlantsList, setFilteredPlantsList] = useState([])
+    const [web, setWeb] = useState(Platform.OS==="web")
+    // const [web, setWeb] = useState(false)
+
 
     //For filters/searching
     const [minPh, setMinPh] = useState(-20)
@@ -42,11 +46,12 @@ export default function App(){
     const [genus, setGenus] = useState("")
     const [family, setFamily] = useState("")
     const [flowerColor, setFlowerColor] = useState("")
+    const [temp, setTemp] = useState("yay")
     //End SearchTerms
 
     function checkSession(){
         
-    return fetch("/api/check_session").then((response) => {
+    return fetch("http://127.0.0.1:5555/api/check_session").then((response) => {
 
         if (response.ok) {
             response.json().then((user) => setUser(user));
@@ -56,22 +61,50 @@ export default function App(){
     
 
     useEffect(()=>{
-        fetch("http://localhost:5555/plants").then(res=>res.json()).then(arr=>{setPlantsList(arr);}).then(checkSession().then(_=>setLoaded(true)));
+        fetch("http://127.0.0.1:5555/plants").then(res=>{setTemp("777");return res.json()}).then(arr=>{setPlantsList(arr);}).then(checkSession().then(_=>setLoaded(true))).catch(function(error) {
+            setTemp(error.message);
+            console.log('There has been a problem with your fetch operation: ' + error.message);
+            });
       }, []);
+ 
 
-
-    if (Platform.OS !== 'web') {
+    if (!web) {
         return (
         <>
         <NavigationContainer >
-            <Tab.Navigator >
-                <Tab.Screen name = "Base" component = {Base}/>
+            <Text className="text-3xl text-center break-words pb-2 bg-white">Hey</Text>
+
+            <Tab.Navigator screenOptions={({route})=>({
+                tabBarButton:[
+                    "Plant"
+                ].includes(route.name)? ()=>{
+                    return null;
+                }: undefined,
+            })} >
                 <Tab.Screen name = "Home" component = {Home}/>
                 <Tab.Screen name = "Plant">
-                    {props=>{return <Plant random={true} {...props}/>}}
+                    {props=>{return <Plant plantIdForNative = {1} random={true} {...props}/>}}
                 </Tab.Screen>
                 <Tab.Screen name="login" component={LoginPage}/>
-                <Tab.Screen name = "Plants" component={PlantsDisplay}></Tab.Screen>
+                <Tab.Screen name = "Plants">                    
+                    {props=>{return <PlantsDisplay loaded={loaded} plantsList={plantsList}
+                setHigherSalinity={setHigherSalinity} setLowerSalinity={setLowerSalinity} setLowerLight={setLowerLight} setHigherLight={setHigherLight}
+                setLowerHimidity={setLowerHimidity} setHigherHimidity={setHigherHimidity} setName={setName}
+                setScientificName={setScientificName} setGenus={setGenus} setFamily={setFamily} setFlowerColor={setFlowerColor}
+                minPh={minPh} maxPh={maxPh} lowerSalinity={lowerSalinity} higherSalinity={higherSalinity} lowerLight={lowerLight} 
+                higherLight={higherLight} lowerHimidity={lowerHimidity} higherHumidity={higherHumidity} name={name}
+                scientificName={scientificName} genus={genus} family={family} flowerColor={flowerColor} temp={temp} {...props}/>}}
+                </Tab.Screen>
+                <Tab.Screen name="gardenhelper">
+                {props=>{return <GardenHelper loaded={loaded} plantsList={plantsList}
+                setHigherSalinity={setHigherSalinity} setLowerSalinity={setLowerSalinity} setLowerLight={setLowerLight} setHigherLight={setHigherLight}
+                setLowerHimidity={setLowerHimidity} setHigherHimidity={setHigherHimidity} setName={setName}
+                setScientificName={setScientificName} setGenus={setGenus} setFamily={setFamily} setFlowerColor={setFlowerColor}
+                minPh={minPh} maxPh={maxPh} lowerSalinity={lowerSalinity} higherSalinity={higherSalinity} lowerLight={lowerLight} 
+                higherLight={higherLight} lowerHimidity={lowerHimidity} higherHumidity={higherHumidity} name={name}
+                scientificName={scientificName} genus={genus} family={family} flowerColor={flowerColor} temp={temp} {...props}/>}}
+
+                </Tab.Screen>
             </Tab.Navigator>
         </NavigationContainer>
         {/* <NavigationContainer>
@@ -86,20 +119,29 @@ export default function App(){
     else{
         return(
         <BrowserRouter>
+            <View>
+            <Text className="text-3xl text-center break-words pb-2">Heyg</Text>
             <Routes>
-                <Route path="/" element={<Base/>}/>
-                <Route path="/home" element={<Home/>}/>
-                <Route path = "/plants/:id" element={<Plant random = {false}/>}/>
+                <Route path="/" element={<Home/>}/>
+                <Route path = "/plants/:id" element={<Plant web={web} />}/>
                 <Route path = "/plants" element={<PlantsDisplay loaded={loaded} plantsList={plantsList}
                 setHigherSalinity={setHigherSalinity} setLowerSalinity={setLowerSalinity} setLowerLight={setLowerLight} setHigherLight={setHigherLight}
                 setLowerHimidity={setLowerHimidity} setHigherHimidity={setHigherHimidity} setName={setName}
                 setScientificName={setScientificName} setGenus={setGenus} setFamily={setFamily} setFlowerColor={setFlowerColor}
                 minPh={minPh} maxPh={maxPh} lowerSalinity={lowerSalinity} higherSalinity={higherSalinity} lowerLight={lowerLight} 
                 higherLight={higherLight} lowerHimidity={lowerHimidity} higherHumidity={higherHumidity} name={name}
-                scientificName={scientificName} genus={genus} family={family} flowerColor={flowerColor}/>}/>
+                scientificName={scientificName} genus={genus} family={family} flowerColor={flowerColor} web={web} />}/>
+                <Route path = "/gardenhelper" element={<GardenHelper loaded={loaded} plantsList={plantsList}
+                setHigherSalinity={setHigherSalinity} setLowerSalinity={setLowerSalinity} setLowerLight={setLowerLight} setHigherLight={setHigherLight}
+                setLowerHimidity={setLowerHimidity} setHigherHimidity={setHigherHimidity} setName={setName}
+                setScientificName={setScientificName} setGenus={setGenus} setFamily={setFamily} setFlowerColor={setFlowerColor}
+                minPh={minPh} maxPh={maxPh} lowerSalinity={lowerSalinity} higherSalinity={higherSalinity} lowerLight={lowerLight} 
+                higherLight={higherLight} lowerHimidity={lowerHimidity} higherHumidity={higherHumidity} name={name}
+                scientificName={scientificName} genus={genus} family={family} flowerColor={flowerColor} web={web} />}/>
                 <Route path = "/login" element = {<LoginPage user={user} setUser={setUser}></LoginPage>}></Route>
                 <Route path = "/users/:id" element={<UserProfile></UserProfile>}></Route>
             </Routes>
+            </View>
         </BrowserRouter>
         );
     }

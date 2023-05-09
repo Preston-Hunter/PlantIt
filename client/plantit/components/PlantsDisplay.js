@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import PlantCard from "./PlantCard"
-import { StyleSheet, Text, View, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Pressable, ScrollView } from 'react-native';
 import SearchBar from "./SearchBar";
+import GenericButton from "./GenericButtons";
 
 export default function PlantsDisplay({plantsList, loaded,
   setHigherSalinity, setLowerSalinity, setLowerLight, setHigherLight,
@@ -9,8 +10,9 @@ export default function PlantsDisplay({plantsList, loaded,
   setScientificName, setGenus, setFamily, setFlowerColor,
   minPh, maxPh, lowerSalinity, higherSalinity, lowerLight, 
                 higherLight, lowerHimidity, higherHumidity, name,
-                scientificName, genus, family, flowerColor 
+                scientificName, genus, family, flowerColor, temp, navigation, web 
 }){
+    const [tempor, SetTempor] = useState(true)
   
     let filteredPlants = plantsList.filter((plant)=>{
       // String
@@ -36,18 +38,24 @@ export default function PlantsDisplay({plantsList, loaded,
     })
     // setFilteredPlantsList(filteredPlants)
 
-    if (!loaded){
-        return <Text>loading</Text>
+    function handleFlip(){
+      SetTempor(!tempor)
     }
-    // console.log(plantsList)
+
+    if (!loaded){
+        return <Text>loading{temp}</Text>
+    }
+    console.log(plantsList)
     return (   
-      <div>
-        <SearchBar setHigherSalinity={setHigherSalinity} setLowerSalinity={setLowerSalinity} setLowerLight={setLowerLight} setHigherLight={setHigherLight}
+      <ScrollView style={{width:"100%"}}>
+        <GenericButton onPressed={handleFlip} label="hide"></GenericButton>
+        {tempor?<SearchBar setHigherSalinity={setHigherSalinity} setLowerSalinity={setLowerSalinity} setLowerLight={setLowerLight} setHigherLight={setHigherLight}
                 setLowerHimidity={setLowerHimidity} setHigherHimidity={setHigherHimidity} setName={setName}
-                setScientificName={setScientificName} setGenus={setGenus} setFamily={setFamily} setFlowerColor={setFlowerColor}/>
-        <ul className="cards" style={{display:"flex", "flexWrap": "wrap", "width":"100%"}}>
-          {filteredPlants.map((plant=>{return <PlantCard plantId={plant.id} name={plant.name}  scientific_name={plant.scientific_name} image = {plant.image} key = {plant.id}></PlantCard>}))}
-        </ul>
-      </div>
+                setScientificName={setScientificName} setGenus={setGenus} setFamily={setFamily} setFlowerColor={setFlowerColor}/>:null}
+        <View className="cards" style={{display:"flex","flexDirection":"row", "alignContent": "stretch","flexWrap": "wrap", "width":"100%"}}>
+          {filteredPlants.map((plant=>{return <PlantCard web={web} navigation = {navigation} plantId={plant.id} name={plant.name}  scientific_name={plant.scientific_name} image = {plant.image} key = {plant.id}></PlantCard>}))}
+        </View>
+        
+      </ScrollView>
         )
 }

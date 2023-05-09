@@ -1,4 +1,5 @@
 import GenericSearchInput from "./GenericSearchInput";
+import { StyleSheet, Text, View, Pressable } from 'react-native';
 
 export default function SearchBar({setHigherSalinity, setLowerSalinity, setLowerLight, setHigherLight,
     setLowerHimidity, setHigherHimidity, setName,
@@ -9,7 +10,7 @@ export default function SearchBar({setHigherSalinity, setLowerSalinity, setLower
 
     return (
 
-    <div id="search-bars" style={{display:"flex", "flexWrap": "wrap", width:"100%"}}>
+    <View id="search-bars" style={styles.container}>
         <GenericSearchInput setSearchTerm={setLowerSalinity} prompt={"setLowerSalinity"} defaultValue={-20}></GenericSearchInput>
         <GenericSearchInput setSearchTerm={setHigherSalinity} prompt={"setHigherSalinity"} defaultValue={20}></GenericSearchInput>
         
@@ -27,5 +28,17 @@ export default function SearchBar({setHigherSalinity, setLowerSalinity, setLower
         
         <GenericSearchInput setSearchTerm={setFlowerColor} prompt={"setFlowerColor"} defaultValue={""}></GenericSearchInput>
 
-    </div>)
+    </View>)
 }
+
+// {display:"flex", "flexWrap": "wrap", width:"100%"}
+const styles = StyleSheet.create({
+    container: {
+      display: "flex",
+      width: '100%',
+      "flexDirection":"row", 
+      "alignContent": "stretch",
+      flexWrap: 'wrap',
+    },
+  });
+  

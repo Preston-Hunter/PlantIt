@@ -221,7 +221,7 @@ api.add_resource(OnePlant, "/plants/<int:id>")
 class RandomPlant(Resource):
     def get(self):
         plants = Plant.query.all()
-        if plants.length != 0:
+        if len(plants) != 0:
             print(len(plants))
             # plant = rc(plants)
             plant = plants[0]

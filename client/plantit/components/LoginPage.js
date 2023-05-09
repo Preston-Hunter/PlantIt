@@ -57,7 +57,21 @@ export default function LoginPage({user, setUser}){
 
             <GenericButton label="logout" onPressed={handleLogout}/>
         </View>
+            <div id="user-info" className=" float-user-elements">
+                {/* <div className="text-3xl text-center break-words pb-2">Name:</div> */}
+                <div id = "username" className="text-3xl text-center break-words pb-2">Username:{user.username}</div>
+                <div id = "email" className="text-3xl text-center break-words pb-2">email:{user.email}</div>
+            </div>
+            <div className="profile-pic-container float-user-elements">
+                <input type="text" onChange={(e)=>{setimgURL(e.target.value)}}/>
+                <button onClick={handleURLUpdate}>upload URL</button>
+                <br></br>
+                {/* <input type="file" onChange={handleAvatarChange}/> */}
+                <img onClick={()=>{console.log("image clicked")}} src = "https://th.bing.com/th?id=OSK.1cd4f39e37aeaa997bfca886bce2e910&w=188&h=132&c=7&o=6&dpr=2.5&pid=SANGAM" alt="hey" id = "profile-pic"/>
+                <div id = "bio">This is where we pull description of the user, made by them</div>
+            </div>
     </View>
     );
     
 }
+
