@@ -15,6 +15,7 @@ class User(db.Model, SerializerMixin):
     email = db.Column(db.String, nullable=False)
     admin = db.Column(db.Boolean)
     image = db.Column(db.String)
+    bio = db.Column(db.String, default = "")
     # created_at = db.Column(db.DateTime, server_default=db.func.now())
     # updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 

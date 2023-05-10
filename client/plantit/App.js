@@ -13,9 +13,8 @@ import UserProfile from "./components/UserProfile.js";
 import PlantsDisplay from "./components/PlantsDisplay.js";
 import LoginPage from "./components/LoginPage.js";
 import GardenHelper from "./components/GardenHelper.js";
-import "./styles.css";
-
-
+import AdminPage from "./components/AdminPage.js";
+import NavBar from "./components/NavBar.js";
 
 const Stack = createNativeStackNavigator();
 // navigation.navigate("About")
@@ -27,6 +26,13 @@ export default function App(){
     const [web, setWeb] = useState(Platform.OS==="web")
     // const [web, setWeb] = useState(false)
 
+    const [isAdmin, setIsAdmin] = useState(determineAdminStatus(user))
+    function determineAdminStatus(us){
+        if (us==null){
+            return false
+        }
+        return user.admin
+    }
 
     //For filters/searching
     const [minPh, setMinPh] = useState(-20)
@@ -51,7 +57,7 @@ export default function App(){
 
     function checkSession(){
         
-    return fetch("http://127.0.0.1:5555/api/check_session").then((response) => {
+    return fetch("http://127.0.0.1:5555/check_session").then((response) => {
 
         if (response.ok) {
             response.json().then((user) => setUser(user));
@@ -66,13 +72,17 @@ export default function App(){
             console.log('There has been a problem with your fetch operation: ' + error.message);
             });
       }, []);
- 
+
+      useEffect(()=>{
+        setIsAdmin(determineAdminStatus(user))
+      },[user]
+      )
 
     if (!web) {
         return (
         <>
         <NavigationContainer >
-            <Text className="text-3xl text-center break-words pb-2 bg-white">Hey</Text>
+            {/* <Text className="text-3xl text-center break-words pb-2 bg-white">Hey</Text> */}
 
             <Tab.Navigator screenOptions={({route})=>({
                 tabBarButton:[
@@ -82,10 +92,13 @@ export default function App(){
                 }: undefined,
             })} >
                 <Tab.Screen name = "Home" component = {Home}/>
+                {isAdmin?<Tab.Screen name = "AdminPage" component = {AdminPage}/>: null}
                 <Tab.Screen name = "Plant">
                     {props=>{return <Plant plantIdForNative = {1} random={true} {...props}/>}}
                 </Tab.Screen>
-                <Tab.Screen name="login" component={LoginPage}/>
+                <Tab.Screen name="login">
+                    {props=>{return <LoginPage isAdmin = {isAdmin} setUser = {setUser} user={user} {...props}/>}}
+                </Tab.Screen>
                 <Tab.Screen name = "Plants">                    
                     {props=>{return <PlantsDisplay loaded={loaded} plantsList={plantsList}
                 setHigherSalinity={setHigherSalinity} setLowerSalinity={setLowerSalinity} setLowerLight={setLowerLight} setHigherLight={setHigherLight}
@@ -119,9 +132,12 @@ export default function App(){
     else{
         return(
         <BrowserRouter>
-            <View>
-            <Text className="text-3xl text-center break-words pb-2">Heyg</Text>
+            {/* <Text className="text-3xl text-center break-words pb-2">Heyg</Text> */}
+            <div style={{ display: 'flex', flexDirection: 'column', width:"100%" }}>
+            <NavBar isAdmin={isAdmin} />
+            <br></br>
             <Routes>
+            
                 <Route path="/" element={<Home/>}/>
                 <Route path = "/plants/:id" element={<Plant web={web} />}/>
                 <Route path = "/plants" element={<PlantsDisplay loaded={loaded} plantsList={plantsList}
@@ -140,8 +156,9 @@ export default function App(){
                 scientificName={scientificName} genus={genus} family={family} flowerColor={flowerColor} web={web} />}/>
                 <Route path = "/login" element = {<LoginPage user={user} setUser={setUser}></LoginPage>}></Route>
                 <Route path = "/users/:id" element={<UserProfile></UserProfile>}></Route>
+                {isAdmin?<Route path = "/adminpage" element={<AdminPage/>}></Route>:null}
             </Routes>
-            </View>
+            </div>
         </BrowserRouter>
         );
     }

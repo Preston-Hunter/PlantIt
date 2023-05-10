@@ -74,19 +74,19 @@ with app.app_context():
 
 #####################
     print("Creating Classname(User) data...")
-    new_user_1 = User(username="Admin", email="Admin@flatironschool.com", admin=True, image=default_image)
+    new_user_1 = User(username="Admin", email="Admin@flatironschool.com", admin=True, image=default_image, bio=fake.paragraph())
     new_user_1.password_hash = "Admin"
 
-    new_user_2 = User(username="Matthew", email="Matthew@flatironschool.com", admin=False, image=default_image)
+    new_user_2 = User(username="Matthew", email="Matthew@flatironschool.com", admin=False, image=default_image, bio=fake.paragraph())
     new_user_2.password_hash = "Matthew"
 
-    new_user_3 = User(username="Preston", email="Preston@flatironschool.com", admin=False, image=default_image)
+    new_user_3 = User(username="Preston", email="Preston@flatironschool.com", admin=False, image=default_image, bio=fake.paragraph())
     new_user_3.password_hash = "Preston"
 
-    new_user_4 = User(username="Dylan", email="Dylan@flatironschool.com",  admin=False, image=default_image)
+    new_user_4 = User(username="Dylan", email="Dylan@flatironschool.com",  admin=False, image=default_image, bio=fake.paragraph())
     new_user_4.password_hash = "Dylan"
 
-    new_user_5 = User(username="GreenGiant", email="Sarah@flatironschool.com", admin=False, image=default_image)
+    new_user_5 = User(username="GreenGiant", email="Sarah@flatironschool.com", admin=False, image=default_image, bio=fake.paragraph())
     new_user_5.password_hash = "GreenGiant"
 
     users = [new_user_1,new_user_2,new_user_3,new_user_4,new_user_5]

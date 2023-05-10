@@ -3,14 +3,25 @@ import { StyleSheet, Text, View, Pressable, TextInput } from 'react-native';
 import GenericButton from "./GenericButtons";
 
 
-export default function LoginPage({user, setUser}){
+export default function LoginPage({user, setUser, isAdmin}){
     const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("")
-    useEffect(()=>{},[])
+    const [password, setPassword] = useState("");
+    const [bio, setBio] = useState("This is where we pull description of the user, made by them")
+    const [textEditable, setTextEditable] = useState(false)
+    const [email, setEmail] = useState("")
+    const [imgURL, setimgURL] = useState("")
+
+    // useEffect(()=>{},[])
+    useEffect(()=>{
+        if(user!==null){
+          setEmail(user.email)
+          setimgURL(user.image)
+        }
+      },[user])
 
     function handleSubmit(e) {
       e.preventDefault();
-      fetch("/api/login", {
+      fetch("http://127.0.0.1:5555/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -23,11 +34,11 @@ export default function LoginPage({user, setUser}){
                 return null
             }
             return r.json()})
-        .then((user) => {setUser(user)});
+        .then((user) => {console.log(user);setUser(user)});
     }
 
     function handleLogout(){
-        fetch("/api/logout", {
+        fetch("http://127.0.0.1:5555/api/logout", {
             method: "DELETE",
              }).then(_=>{setUser(null)})
     }
@@ -36,42 +47,123 @@ export default function LoginPage({user, setUser}){
         console.log(us)
     }
 
+
+    function tempp(){
+    return fetch("http://127.0.0.1:5555/check_session").then((response) => {
+
+        if (response.ok) {
+            response.json().then((user) => setUser(user));
+        }
+        })
+    }
+
+      function toggleText(){
+        setTextEditable(!textEditable)
+      }
+
+      function handleSubmitChanges(){
+          fetch(`http://127.0.0.1:5555/users/${id}`,{
+            method:"PATCH",
+            headers:{
+              "Content-Type":"application/json"
+            },
+            body:JSON.stringify({"email":email, "image":imgURL})
+          }).then(resp=>{if (resp.status==400){
+            handleCancel()
+            // do an alert
+            return null
+          }
+        else{
+          // do an alert
+          console.log("success")
+        }})
+      }
+
+      function handleCancel(){
+        setBio("This is where we pull description of the user, made by them")
+        setEmail(user.email)
+        setimgURL(user.image)
+        toggleText()
+      }
+
+
+
     return (
     <View>
-        <Text>{!user ? "none": user["username"]}</Text>
+        <Text>{!user ? "none": user["username"]}{!user?null:(user["admin"] ? "true":"false")}</Text>
 
 
-            <TextInput
-            type="text"
-            value={username}
-            onChangeText={(text) => setUsername(text)}
-            />
-            
-            <TextInput
-            type="text"
-            value={password}
-            onChangeText={(text) => setPassword(text)}
-            />
+        <TextInput
+        type="text"
+        value={username}
+        onChangeText={(text) => setUsername(text)}
+        />
+        
+        <TextInput
+        type="text"
+        value={password}
+        onChangeText={(text) => setPassword(text)}
+        />
         <View>
             <GenericButton theme="submit"  label="login" onPressed={handleSubmit}/>
 
             <GenericButton label="logout" onPressed={handleLogout}/>
         </View>
-            <div id="user-info" className=" float-user-elements">
+        {user!==null?
+        <View>
+            <View id="user-info" style={{...styles.user_info, ...styles.float_user_elements}} className="float-user-elements">
                 {/* <div className="text-3xl text-center break-words pb-2">Name:</div> */}
-                <div id = "username" className="text-3xl text-center break-words pb-2">Username:{user.username}</div>
-                <div id = "email" className="text-3xl text-center break-words pb-2">email:{user.email}</div>
-            </div>
-            <div className="profile-pic-container float-user-elements">
-                <input type="text" onChange={(e)=>{setimgURL(e.target.value)}}/>
-                <button onClick={handleURLUpdate}>upload URL</button>
-                <br></br>
-                {/* <input type="file" onChange={handleAvatarChange}/> */}
-                <img onClick={()=>{console.log("image clicked")}} src = "https://th.bing.com/th?id=OSK.1cd4f39e37aeaa997bfca886bce2e910&w=188&h=132&c=7&o=6&dpr=2.5&pid=SANGAM" alt="hey" id = "profile-pic"/>
-                <div id = "bio">This is where we pull description of the user, made by them</div>
-            </div>
+                <Text id = "username" className="text-3xl text-center break-words pb-2">Username:{user.username}</Text>
+                {textEditable? <View style={{flexDirection:"row", display:"flex"}}><Text>email:</Text><TextInput style={{width:"100%"}} value={email} onChangeText={(text)=>{setEmail(text)}}></TextInput></View>:
+                <Text onPress={()=>{toggleText()}} id = "email" className="text-3xl text-center break-words pb-2">email:{email}</Text>}
+            </View>
+            <View style={{...styles.profile_pic_container}} className="profile-pic-container">
+                {textEditable?<TextInput type="text" placeholder={imgURL} onChangeText={(text)=>{setimgURL(text)}}/>:null}
+                <img onClick={()=>{if(!textEditable){toggleText()}}} src = {user.image} alt="hey" id = "profile-pic"/>
+                {textEditable?
+                    <TextInput style={styles.bio} id = "bio" value={bio} onChangeText={(text)=>{setBio(text)}}/>:
+                    <Text onPress={toggleText}>{bio}</Text>}
+                {textEditable?<View><Pressable onPress={()=>{handleSubmitChanges()}}><Text>Save Changes</Text></Pressable>
+                <Pressable onPress={()=>{handleCancel()}}><Text>Cancel Changes</Text></Pressable>
+                </View>:null}
+            </View>
+        </View>:null}
+
     </View>
     );
     
 }
 
+
+const styles = StyleSheet.create({
+    profile_pic_container:{
+        // float:"right",
+        padding_right: "10px",
+        width:"50%",
+        float:"right"
+    
+      },
+      bio:{
+        width:"100%"
+      },
+      
+      user_page:{
+        padding_left: "160px",
+        height: "100%"
+      
+      },
+      
+      user_info:{
+        // height: "80%",
+        max_width: "50%",
+        margin_top: "150px",
+        align_items: "center"
+        /* position: relative; */
+      },
+      
+      
+      float_user_elements:{
+        width:"50%",
+        float:"left"
+      },
+    })

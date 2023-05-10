@@ -16,7 +16,7 @@ export default function PlantCard({image, plantId, scientific_name, name, naviga
         if (!web){
             navigation.navigate("Plant",{"plantIdForNative":plantIdForNative, "web":web})
         }
-        navigate(`/plants/${plantId}`)  
+        navigate(`http://127.0.0.1:5555/plants/${plantId}`)  
     }
 
     return (
