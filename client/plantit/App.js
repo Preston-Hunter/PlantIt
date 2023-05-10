@@ -23,8 +23,8 @@ export default function App(){
     const [plantsList, setPlantsList]= useState([])
     const [loaded, setLoaded] = useState(true)
     const [user,setUser] = useState(null)
-    const [web, setWeb] = useState(Platform.OS==="web")
-    // const [web, setWeb] = useState(false)
+    // const [web, setWeb] = useState(Platform.OS==="web")
+    const [web, setWeb] = useState(false)
 
     const [isAdmin, setIsAdmin] = useState(determineAdminStatus(user))
     function determineAdminStatus(us){

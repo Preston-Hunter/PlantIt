@@ -50,7 +50,6 @@ export default function LoginPage({user, setUser, isAdmin}){
 
     function tempp(){
     return fetch("http://127.0.0.1:5555/check_session").then((response) => {
-
         if (response.ok) {
             response.json().then((user) => setUser(user));
         }
@@ -62,7 +61,7 @@ export default function LoginPage({user, setUser, isAdmin}){
       }
 
       function handleSubmitChanges(){
-          fetch(`http://127.0.0.1:5555/users/${id}`,{
+          fetch(`http://127.0.0.1:5555/users/${user.id}`,{
             method:"PATCH",
             headers:{
               "Content-Type":"application/json"

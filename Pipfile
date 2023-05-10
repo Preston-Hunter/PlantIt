@@ -18,6 +18,8 @@ requests = "*"
 faker = "*"
 python-dotenv = "*"
 flask-session = "*"
+psycopg2-binary = "*"
+gunicorn = "*"
 
 [dev-packages]
 

@@ -13,7 +13,7 @@ load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("secret_key")                   
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db_name.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URI')    #'sqlite:///db_name.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
 app.permanent_session_lifetime = datetime.timedelta(days=365)
