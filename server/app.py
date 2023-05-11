@@ -406,7 +406,7 @@ class Login(Resource):
                 print(session.get("username"))
                 return user.to_dict(), 200 
         return {'error': '401 Unauthorized'}, 401
-api.add_resource(Login, '/api/login', endpoint='login')
+api.add_resource(Login, '/login', endpoint='login')
 
 # @app.before_request
 # def setup():

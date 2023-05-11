@@ -52,7 +52,7 @@ export default function PlantsDisplay({plantsList, loaded,
         {tempor?<SearchBar setHigherSalinity={setHigherSalinity} setLowerSalinity={setLowerSalinity} setLowerLight={setLowerLight} setHigherLight={setHigherLight}
                 setLowerHimidity={setLowerHimidity} setHigherHimidity={setHigherHimidity} setName={setName}
                 setScientificName={setScientificName} setGenus={setGenus} setFamily={setFamily} setFlowerColor={setFlowerColor}/>:null}
-        <View className="cards" style={{display:"flex","flexDirection":"row", "alignContent": "stretch","flexWrap": "wrap", "width":"100%"}}>
+        <View className="cards" style={{display:"flex","flexDirection":"row", "alignContent": "stretch","flexWrap": "wrap", "width":"100%", marginTop:"20px"}}>
           {filteredPlants.map((plant=>{return <PlantCard web={web} navigation = {navigation} plantId={plant.id} name={plant.name}  scientific_name={plant.scientific_name} image = {plant.image} key = {plant.id}></PlantCard>}))}
         </View>
         

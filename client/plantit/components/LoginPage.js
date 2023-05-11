@@ -22,7 +22,7 @@ export default function LoginPage({user, setUser, isAdmin}){
 
     function handleSubmit(e) {
       e.preventDefault();
-      fetch("/api/login", {
+      fetch("/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
