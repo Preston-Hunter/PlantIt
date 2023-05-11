@@ -3,7 +3,7 @@ import {useParams} from "react-router-dom"
 import { StyleSheet, Text, View, Pressable, Platform } from 'react-native';
 import CommentsSection from "./CommentsSection";
 
-export default function Plant({plantIdForNative, web }){
+export default function Plant({plantIdForNative, web, user }){
     const [loaded, setLoaded] = useState(false)
     const [loaded2, setLoaded2] = useState(false)
 

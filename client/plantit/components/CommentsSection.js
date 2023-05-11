@@ -8,7 +8,7 @@ export default function CommentsSection({plantId}){
     const [loaded, setLoaded] = useState(false)
     const [newComment, setNewComment] = useState("")
     function retrieveComments(){
-        return fetch(`http://127.0.0.1:5555/commentsforplant/${plantId}`).then(resp=>{
+        return fetch(`https://plantitweb.onrender.com/commentsforplant/${plantId}`).then(resp=>{
             if(resp.status==500){
                 return []
             }
@@ -18,7 +18,7 @@ export default function CommentsSection({plantId}){
     }
 
     function postComment(){
-        fetch(`http://127.0.0.1:5555/comments`,{
+        fetch(`https://plantitweb.onrender.com/comments`,{
             method:"POST",
             headers: {
                 "Content-Type": "application/json",

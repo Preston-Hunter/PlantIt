@@ -17,7 +17,7 @@ export default function UserProfile(){
     const { id } = useParams()
     useEffect(()=>{
 
-        fetch(`https://plantitweb.onrender.com/${id}`)
+        fetch(`https://plantitweb.onrender.com/users/${id}`)
         .then(resp=>resp.json())
         .then(userData=>{
             console.log(userData);

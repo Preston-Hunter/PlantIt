@@ -23,8 +23,8 @@ export default function App(){
     const [plantsList, setPlantsList]= useState([])
     const [loaded, setLoaded] = useState(true)
     const [user,setUser] = useState(null)
-    // const [web, setWeb] = useState(Platform.OS==="web")
-    const [web, setWeb] = useState(false)
+    const [web, setWeb] = useState(Platform.OS==="web")
+    // const [web, setWeb] = useState(false)
 
     const [isAdmin, setIsAdmin] = useState(determineAdminStatus(user))
     function determineAdminStatus(us){
@@ -94,7 +94,7 @@ export default function App(){
                 <Tab.Screen name = "Home" component = {Home}/>
                 {isAdmin?<Tab.Screen name = "AdminPage" component = {AdminPage}/>: null}
                 <Tab.Screen name = "Plant">
-                    {props=>{return <Plant plantIdForNative = {1} random={true} {...props}/>}}
+                    {props=>{return <Plant plantIdForNative = {1} user={user} {...props} web={web}/>}}
                 </Tab.Screen>
                 <Tab.Screen name="login">
                     {props=>{return <LoginPage isAdmin = {isAdmin} setUser = {setUser} user={user} {...props}/>}}
@@ -139,7 +139,7 @@ export default function App(){
             <Routes>
             
                 <Route path="/" element={<Home/>}/>
-                <Route path = "/plants/:id" element={<Plant web={web} />}/>
+                <Route path = "/plants/:id" element={<Plant web={web} user={user} />}/>
                 <Route path = "/plants" element={<PlantsDisplay loaded={loaded} plantsList={plantsList}
                 setHigherSalinity={setHigherSalinity} setLowerSalinity={setLowerSalinity} setLowerLight={setLowerLight} setHigherLight={setHigherLight}
                 setLowerHimidity={setLowerHimidity} setHigherHimidity={setHigherHimidity} setName={setName}
