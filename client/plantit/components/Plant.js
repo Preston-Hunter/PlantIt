@@ -18,7 +18,7 @@ export default function Plant({plantIdForNative, web }){
     const [favorited, setFavorited] = useState(false)
 
     useEffect(()=>{
-        fetch("http://127.0.0.1:5555/userplants").then(resp=>resp.json())
+        fetch("https://plantitweb.onrender.com/userplants").then(resp=>resp.json())
         .then(arr=>arr.filter((up)=>{
             console.log(up.plant_id, up.user_id)
             if (up.plant_id == id){
@@ -50,7 +50,7 @@ export default function Plant({plantIdForNative, web }){
     },[])
 
     useEffect(()=>{
-        fetch(`http://127.0.0.1:5555/plants/${id}`)
+        fetch(`https://plantitweb.onrender.com/plants/${id}`)
         .then(resp=>{
 
             if (resp.status == 404){
@@ -72,7 +72,7 @@ export default function Plant({plantIdForNative, web }){
 
 // delete favorite liked or platned im tired
     function handleFavorite(){
-        fetch(`http://127.0.0.1:5555/userplants`, {
+        fetch(`https://plantitweb.onrender.com/userplants`, {
             method:"POST",
             headers:{
                 "Content-Type":"application/json",
@@ -82,7 +82,7 @@ export default function Plant({plantIdForNative, web }){
     }
 
     function handleUnfavorite(){
-        fetch("http://127.0.0.1:5555/userplants").then(resp=>resp.json())
+        fetch("https://plantitweb.onrender.com/userplants").then(resp=>resp.json())
         .then(arr=>arr.filter((up)=>{
             if (up.plant_id == id){
                 if (up.user_id == 1){
@@ -102,7 +102,7 @@ export default function Plant({plantIdForNative, web }){
             if(userplant===false){
                 return false
             }
-            fetch(`http://127.0.0.1:5555/userplants/${userplant.id}`, {
+            fetch(`https://plantitweb.onrender.com/userplants/${userplant.id}`, {
                 method:"DELETE",
                 headers:{
                     "Content-Type":"application/json",

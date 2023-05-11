@@ -383,7 +383,7 @@ class Logout(Resource):
     def delete(self):
         session['username'] = None
         return {}, 204
-api.add_resource(Logout, '/api/logout', endpoint='logout')  
+api.add_resource(Logout, '/logout', endpoint='logout')  
 
 
 class ClearSession(Resource):

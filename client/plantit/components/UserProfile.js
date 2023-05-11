@@ -9,7 +9,7 @@ export default function UserProfile(){
     const [imgURL, setimgURL] = useState(null)
     const [user, setUser] = useState(null)
     const [loaded, setLoaded] = useState(false)
-    const [bio, setBio] = useState("This is where we pull description of the user, made by them")
+    const [bio, setBio] = useState("")
     const [textEditable, setTextEditable] = useState(false)
     const [email, setEmail] = useState("")
     // const {username} = useParams()
@@ -17,7 +17,7 @@ export default function UserProfile(){
     const { id } = useParams()
     useEffect(()=>{
 
-        fetch(`http://127.0.0.1:5555/users/${id}`)
+        fetch(`https://plantitweb.onrender.com/${id}`)
         .then(resp=>resp.json())
         .then(userData=>{
             console.log(userData);
@@ -30,7 +30,10 @@ export default function UserProfile(){
         }, [id])
     useEffect(()=>{
       if(user!==null){
-        setEmail(user.email)}
+        setEmail(user.email)
+        setBio(user.bio)
+        setimgURL(user.image)
+      }
     },[user])
 
         function handleURLUpdate(){
@@ -54,7 +57,7 @@ export default function UserProfile(){
         }
 
         function handleSubmitChanges(){
-            fetch(`http://127.0.0.1:5555/users/${id}`,{
+            fetch(`https://plantitweb.onrender.com/${id}`,{
               method:"PATCH",
               headers:{
                 "Content-Type":"application/json"
@@ -72,9 +75,10 @@ export default function UserProfile(){
         }
 
         function handleCancel(){
-          setBio("This is where we pull description of the user, made by them")
+          setBio(user.bio)
           setEmail(user.email)
           setimgURL(user.image)
+          
           toggleText()
         }
 

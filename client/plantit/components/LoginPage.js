@@ -6,7 +6,7 @@ import GenericButton from "./GenericButtons";
 export default function LoginPage({user, setUser, isAdmin}){
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [bio, setBio] = useState("This is where we pull description of the user, made by them")
+    const [bio, setBio] = useState("")
     const [textEditable, setTextEditable] = useState(false)
     const [email, setEmail] = useState("")
     const [imgURL, setimgURL] = useState("")
@@ -16,12 +16,13 @@ export default function LoginPage({user, setUser, isAdmin}){
         if(user!==null){
           setEmail(user.email)
           setimgURL(user.image)
+          setBio(user.bio)
         }
       },[user])
 
     function handleSubmit(e) {
       e.preventDefault();
-      fetch("http://127.0.0.1:5555/login", {
+      fetch("https://plantitweb.onrender.com/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -38,7 +39,7 @@ export default function LoginPage({user, setUser, isAdmin}){
     }
 
     function handleLogout(){
-        fetch("http://127.0.0.1:5555/api/logout", {
+        fetch("https://plantitweb.onrender.com/logout", {
             method: "DELETE",
              }).then(_=>{setUser(null)})
     }
@@ -61,7 +62,7 @@ export default function LoginPage({user, setUser, isAdmin}){
       }
 
       function handleSubmitChanges(){
-          fetch(`http://127.0.0.1:5555/users/${user.id}`,{
+          fetch(`https://plantitweb.onrender.com/users/${user.id}`,{
             method:"PATCH",
             headers:{
               "Content-Type":"application/json"
@@ -75,11 +76,12 @@ export default function LoginPage({user, setUser, isAdmin}){
         else{
           // do an alert
           console.log("success")
+          toggleText()
         }})
       }
 
       function handleCancel(){
-        setBio("This is where we pull description of the user, made by them")
+        setBio(user.bio)
         setEmail(user.email)
         setimgURL(user.image)
         toggleText()
