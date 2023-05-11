@@ -1,6 +1,7 @@
 import { useRef, useState, ChangeEvent, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import {StyleSheet, Text, View, Pressable, TextInput } from 'react-native';
+import ImageViewer from "./ImageViewer";
 
 
 export default function UserProfile(){
@@ -94,7 +95,8 @@ export default function UserProfile(){
                 </View>
                 <View style={{...styles.profile_pic_container}} className="profile-pic-container">
                     {textEditable?<TextInput type="text" placeholder="url" onChangeText={(text)=>{setimgURL(text)}}/>:null}
-                    <img onClick={()=>{if(!textEditable){toggleText()}}} src = {user.image} alt="hey" id = "profile-pic"/>
+                    {/* <img onClick={()=>{if(!textEditable){toggleText()}}} src = {user.image} alt="hey" id = "profile-pic"/> */}
+                    <ImageViewer img={{uri:user.image}}></ImageViewer>
                     {textEditable?
                       <TextInput style={styles.bio} id = "bio" value={bio} onChangeText={(text)=>{setBio(text)}}/>:
                       <Text onPress={toggleText}>{bio}</Text>}

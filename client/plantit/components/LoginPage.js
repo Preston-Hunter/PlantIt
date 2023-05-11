@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, View, Pressable, TextInput } from 'react-native';
 import GenericButton from "./GenericButtons";
+import ImageViewer from "./ImageViewer";
 
 
 export default function LoginPage({user, setUser, isAdmin}){
@@ -22,7 +23,7 @@ export default function LoginPage({user, setUser, isAdmin}){
 
     function handleSubmit(e) {
       e.preventDefault();
-      fetch("/login", {
+      fetch("https://plantitweb.onrender.com/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -35,7 +36,7 @@ export default function LoginPage({user, setUser, isAdmin}){
                 return null
             }
             return r.json()})
-        .then((user) => {console.log(user);setUser(user)});
+        .then((user) => {console.log(user);setUser(user); setPassword("");setUsername("")});
     }
 
     function handleLogout(){
@@ -67,7 +68,7 @@ export default function LoginPage({user, setUser, isAdmin}){
             headers:{
               "Content-Type":"application/json"
             },
-            body:JSON.stringify({"email":email, "image":imgURL})
+            body:JSON.stringify({"email":email, "image":imgURL, "bio":bio})
           }).then(resp=>{if (resp.status==400){
             handleCancel()
             // do an alert
@@ -120,7 +121,8 @@ export default function LoginPage({user, setUser, isAdmin}){
             </View>
             <View style={{...styles.profile_pic_container}} className="profile-pic-container">
                 {textEditable?<TextInput type="text" placeholder={imgURL} onChangeText={(text)=>{setimgURL(text)}}/>:null}
-                <img onClick={()=>{if(!textEditable){toggleText()}}} src = {user.image} alt="hey" id = "profile-pic"/>
+                {/* <img onClick={()=>{if(!textEditable){toggleText()}}} src = {user.image} alt="hey" id = "profile-pic"/> */}
+                <ImageViewer src={{uri:user.image}}></ImageViewer>
                 {textEditable?
                     <TextInput style={styles.bio} id = "bio" value={bio} onChangeText={(text)=>{setBio(text)}}/>:
                     <Text onPress={toggleText}>{bio}</Text>}

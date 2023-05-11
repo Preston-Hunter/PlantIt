@@ -38,7 +38,7 @@ export default function GardenHelper({plantsList, loaded,
                 }
                 else{setStringSearch(text); setVal(text)}
             }}/>
-            <View className="cards" style={{display:"flex","flexDirection":"row", "alignContent": "stretch","flexWrap": "wrap", "width":"100%"}}>
+            <View className="cards" style={{display:"flex","flexDirection":"row", "alignContent": "stretch","flexWrap": "wrap", "width":"100%", marginTop:20}}>
             {filteredPlants.map((plant=>{return <PlantCard web={web} navigation={navigation} plantId={plant.id} name={plant.name}  scientific_name={plant.scientific_name} image = {plant.image} key = {plant.id}></PlantCard>}))}
             </View>
 

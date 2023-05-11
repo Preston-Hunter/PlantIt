@@ -94,7 +94,7 @@ export default function App(){
                 <Tab.Screen name = "Home" component = {Home}/>
                 {isAdmin?<Tab.Screen name = "AdminPage" component = {AdminPage}/>: null}
                 <Tab.Screen name = "Plant">
-                    {props=>{return <Plant plantIdForNative = {1} user={user} {...props} web={web}/>}}
+                    {props=>{return <Plant user={user} {...props} web={web}/>}}
                 </Tab.Screen>
                 <Tab.Screen name="login">
                     {props=>{return <LoginPage isAdmin = {isAdmin} setUser = {setUser} user={user} {...props}/>}}
@@ -106,7 +106,7 @@ export default function App(){
                 setScientificName={setScientificName} setGenus={setGenus} setFamily={setFamily} setFlowerColor={setFlowerColor}
                 minPh={minPh} maxPh={maxPh} lowerSalinity={lowerSalinity} higherSalinity={higherSalinity} lowerLight={lowerLight} 
                 higherLight={higherLight} lowerHimidity={lowerHimidity} higherHumidity={higherHumidity} name={name}
-                scientificName={scientificName} genus={genus} family={family} flowerColor={flowerColor} temp={temp} {...props}/>}}
+                scientificName={scientificName} genus={genus} family={family} flowerColor={flowerColor} temp={temp} web={web} {...props}/>}}
                 </Tab.Screen>
                 <Tab.Screen name="gardenhelper">
                 {props=>{return <GardenHelper loaded={loaded} plantsList={plantsList}
